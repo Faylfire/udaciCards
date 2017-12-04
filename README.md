@@ -2,7 +2,10 @@
 
 This is the final assessment project for Udacity's React-Native course (part of the React Nanodegree) where you build a flashcards mobile app using react-native which could be run on both ios and android devices. Users will be able to see a list of their current flashcard decks, add new decks, view individual deck content, add new cards and take quizzes with a score given in percentages at the end. Users will also be able notified through local notification if they have not practiced/taken a quiz by a set time everyday.
 
-This repository includes the code you'll use to start the exp server to run the mobile app leveraging the Expo client app in your Android or iOS devices.
+This repository includes the code you'll use to start the exp server to run the mobile app leveraging the Expo client app in your Android or iOS devices. There are iOS and Android Simulator options as well provided both environments are installed.
+
+ * [Xcode](https://developer.apple.com/xcode/downloads/)
+ * [Android Studio](https://developer.android.com/studio/index.html)
 
 React-Native is used in conjuction with React-Native-Elements to create the views.
 
