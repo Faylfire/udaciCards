@@ -30,10 +30,10 @@ Clone the repo follow the instructions below:
     - `yarn start`
 * Once the expo service is started follow the instructions shown in the console
 
-		`› Press a to open Android device or emulator.
-     › Press q to display QR code.
-     › Press r to restart packager, or R to restart packager and clear cache.
-     › Press d to toggle development mode. (current mode: development).`
+		`› Press a to open Android device or emulator.`
+    `› Press q to display QR code.`
+    `› Press r to restart packager, or R to restart packager and clear cache.`
+    `› Press d to toggle development mode. (current mode: development).`
     - To run on your personal iOS or Android Device install the Expo Client App from the app store on any device
     - Open the Client app and use the QR scanner provided by the app or enter the address in the Expo app's search bar most likely in this format: `exp://192.168.0.x:1900x`
 
