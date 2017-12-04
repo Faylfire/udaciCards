@@ -66,6 +66,7 @@ const Tabs = TabNavigator({
     screen: DeckView,
     title: 'My Flashcards',
     navigationOptions: {
+      headerTintStyle:"#fff",
       tabBarLabel: 'Collection',
       tabBarIcon: ({ tintColor }) => <Ionicons name='ios-list-box' size={30} color={tintColor} />
     },
@@ -75,6 +76,7 @@ const Tabs = TabNavigator({
     screen: AddDeck,
     title: 'Add New Deck',
     navigationOptions: {
+      headerTintStyle:"#fff",
       tabBarLabel: 'Add New Deck',
       tabBarIcon: ({ tintColor }) => <FontAwesome name='plus-square' size={30} color={tintColor} />
     },
@@ -138,6 +140,7 @@ export default class App extends Component {
     return (
       <Provider store={createStore(rootReducer)}>
         <View style={{flex:1}}>
+          <StatusBar barStyle='light-content'/>
           <MainNavigator />
         </View>
       </Provider>
@@ -152,10 +155,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  box: {
-    width: 50,
-    height: 50,
-    backgroundColor: '#e76e63',
-    margin: 10,
-  }
 })

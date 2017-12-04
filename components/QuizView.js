@@ -202,7 +202,9 @@ class QuizView extends React.Component {
 							<Text style={{margin:5, fontSize:20}}>
 									{`${quizQuestion}/${numCards}`}
 								</Text>
-								{this.renderItem({card:card})}
+								<ScrollView style={{flex:1}}>
+									{this.renderItem({card:card})}
+								</ScrollView>
 								<View style={{flexDirection:'row', justifyContent:'space-around'}}>
 									<TouchableOpacity
 						         style={[styles.button, styles.btnCorrect]}
@@ -236,8 +238,8 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: '#91C3DC',
     borderRadius: Platform.OS === 'ios' ? 16 : 2,
-    width: width(70),
     height: height(60),
+    width: width(75),
     padding: 20,
     marginLeft: 10,
     marginRight: 10,

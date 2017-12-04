@@ -101,21 +101,13 @@ class DeckView extends React.Component {
               { deckId: id, title: individualTitle }
             )}
       >
-      	{!state.cardBack[id]
-	        ? <Deck
-							deckId={id}
-							title={title}
-							description={description}
-							cardCount={cardCount}
-							cards={JSON.stringify(cards)}
-					  />
-					: <View key={id} style={styles.card}>
-							<Text style={{fontSize:20}}></Text>
-							<Text style={{margin:11}}>Back of the Card </Text>
-							<Text ></Text>
-						</View>
-
-				}
+        <Deck
+						deckId={id}
+						title={title}
+						description={description}
+						cardCount={cardCount}
+						cards={JSON.stringify(cards)}
+				 />
       </TouchableOpacity>
 		)
 
