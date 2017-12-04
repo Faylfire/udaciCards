@@ -16,11 +16,29 @@ import { Constants } from 'expo'
 import { purple, white } from '../utils/colors'
 import { setDummyData} from '../utils/deckCreator.js'
 import { getDecks } from '../utils/api.js'
-import { isEmptyObj } from '../utils/helpers.js'
+import { isEmptyObj,
+				 clearLocalNotification,
+  			 setLocalNotification,
+} from '../utils/helpers.js'
 import { connect } from 'react-redux'
 import { receiveDecks, addDeck, addCard } from '../actions'
 import { width, height, totalSize } from 'react-native-dimension'
 import AddCardButton from './AddCardButton.js'
+
+
+function Card ({ cardId, question, answer, message, backgroundColor}) {
+	return (
+		<View key={cardId} style={[styles.card, {backgroundColor:backgroundColor}]}>
+				<Text allowFontScaling
+							style={{flexWrap: 'wrap', color:'#555555'}}
+				>
+					{message}
+				</Text>
+		</View>
+
+		)
+}
+
 
 
 class QuizView extends React.Component {
@@ -44,6 +62,8 @@ class QuizView extends React.Component {
     				deck:{},
     				cardBack:{},
     				quizQuestion:1,
+    				score:0,
+    				quizComplete:false,
 					}
   }
 
@@ -54,8 +74,8 @@ class QuizView extends React.Component {
 
 
 
-	renderItem = ({ item }) =>{
-		let {question, answer, cardId } = item
+	renderItem = ({ card }) =>{
+		let {question, answer, cardId } = card
 		let { cardBack } = this.state
 		let state = this.state
 
@@ -72,66 +92,134 @@ class QuizView extends React.Component {
 							cardId={cardId}
 							question={question}
 							answer={answer}
+							message={question}
+							backgroundColor='#91C3DC'
 					  />
-					: <View key={cardId} style={[styles.card, {backgroundColor:'#AAB6A2'}]}>
-							<Text adjustsFontSizeToFit style={{flexWrap: 'wrap'}}>{answer}</Text>
-						</View>
+					: <Card
+							cardId={cardId}
+							question={question}
+							answer={answer}
+							message={answer}
+							backgroundColor='#AAB6A2'
+					  />
+
 				}
       </TouchableOpacity>
 		)
+
+	}
+
+	resetQuiz = () => {
+		this.setState({
+    				deck:{},
+    				cardBack:{},
+    				quizQuestion:1,
+    				score:0,
+    				quizComplete:false,
+					})
+	}
+
+	backToDeck = () => this.props.navigation.goBack()
+
+	onCorrect = () => this.onPress(true)
+
+	onIncorrect = () => this.onPress(false)
+
+	onPress = (bool) => {
+
+		let quizQuestion = this.state.quizQuestion + 1
+		let score = this.state.score
+		let {numCards} = this.props
+
+		if (bool){
+			score = score+1
+		}
+		console.log('Question Number: '+ quizQuestion)
+		console.log(score+'/'+numCards)
+		if (quizQuestion > numCards){
+			this.setState({
+				score:score,
+				quizComplete: true,
+			})
+
+			clearLocalNotification()
+				.then(setLocalNotification)
+
+		} else {
+			this.setState({
+				quizQuestion: quizQuestion,
+				score:score,
+			})
+		}
+		console.log(this.state)
 	}
 
 	render() {
-		let { decks, deckId, numCards} = this.props
-		let { quizQuestion } = this.state
+		let { decks, deckId, numCards, cards} = this.props
+		let { quizQuestion, quizComplete, score} = this.state
 		console.log("In Render CardView")
 		console.log(decks)
 		console.log(this.props)
-		//let decks = Object.values(this.state.decks)
-		let cards = {}
-		let deck = {}
+
 		let card = {}
-		//let num = 0
+		let finalScore = 0
 
 
+		//If we have the decks, then getting the card from the decks
+		//would be successful.
 		if (!isEmptyObj(decks)){
-			//deck = decks[this.props.screenProps.deckId]
-			deck=decks[deckId]
-			cards = Object.values(deck.cards)
-			//numCards = cards.length
-			title = deck.title
-			card = cards[0]
+			card = cards[quizQuestion-1]
+			finalScore = (score/numCards*100).toFixed(0)
 		}
 
-		//let decks = setDummyData()
-		//decks = Object.values(decks)
 		console.log("Inside Card Render")
-		console.log(cards)
+		console.log('Score: ' + this.state.score)
 
 
 		return (
-			<View style={styles.container}>
-				<Text style={{fontSize:20}}>
-					{`${quizQuestion}/${numCards}`}
-				</Text>
-				{renderItem(card)}
-
-				<View style={{flexDirection:'row', justifyContent:'space-around'}}>
-					<TouchableOpacity
-		         style={styles.buttonRight}
-		         onPress={this.onPress}
-		      >
-		         <Text>Correct</Text>
-		      </TouchableOpacity>
-		      <TouchableOpacity
-		         style={styles.buttonWrong}
-		         onPress={this.onPress}
-		      >
-		         <Text>Incorrect</Text>
-		      </TouchableOpacity>
-
+			<View style={{flex:1}}>
+				{quizComplete===true
+					?	<View style={styles.container}>
+							<Text style={{color:'#555', fontSize:32,textAlign:'center'}}>
+								{`Score: ${finalScore}%\n${score}/${numCards} Correct`}
+							</Text>
+							<View style={{flexDirection:'row', justifyContent:'space-around'}}>
+								<TouchableOpacity
+					         style={[styles.button, styles.btnNeutral]}
+					         onPress={this.backToDeck}
+					      >
+					         <Text style={{color:'#fff', textAlign:'center'}}>Back to Deck!</Text>
+					      </TouchableOpacity>
+					      <TouchableOpacity
+					         style={[styles.button, styles.btnNeutral]}
+					         onPress={this.resetQuiz}
+					      >
+					         <Text style={{color:'#fff', textAlign:'center'}}>Restart Quiz!</Text>
+					      </TouchableOpacity>
+							</View>
+						</View>
+					: <View style={styles.container}>
+							<Text style={{margin:5, fontSize:20}}>
+									{`${quizQuestion}/${numCards}`}
+								</Text>
+								{this.renderItem({card:card})}
+								<View style={{flexDirection:'row', justifyContent:'space-around'}}>
+									<TouchableOpacity
+						         style={[styles.button, styles.btnCorrect]}
+						         onPress={this.onCorrect}
+						      >
+						         <Text style={{color:'#555'}}>Know it!</Text>
+						      </TouchableOpacity>
+						      <TouchableOpacity
+						         style={[styles.button, styles.btnWrong]}
+						         onPress={this.onIncorrect}
+						      >
+						         <Text style={{color:'#555'}}>Not Yet!</Text>
+						      </TouchableOpacity>
+								</View>
+							</View>
+					}
 				</View>
-			</View>
 		)
 	}
 }
@@ -142,20 +230,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor:'#ecf0f1',
-  },
-  review: {
-  	flex:1,
-    backgroundColor: 'steelblue',
-    margin: 10,
     alignItems:'center',
-    padding:10,
-  },
-  box: {
-    width: 50,
-    height: 70,
-    backgroundColor: '#e76e63',
-    margin: 10,
-    alignItems:'center'
+    justifyContent:'space-around'
   },
   card: {
     backgroundColor: '#91C3DC',
@@ -182,45 +258,52 @@ const styles = StyleSheet.create({
   	marginRight:10,
   	marginLeft:10,
   },
-  buttonRight: {
+  button: {
     alignItems: 'center',
-    backgroundColor: '#009933',
-    padding: 10
+    padding: 10,
+    borderRadius:15,
+    margin:20,
+    width:100,
+    shadowRadius: 3,
+    shadowOpacity: 0.8,
+    shadowColor: 'rgba(0, 0, 0, 0.24)',
+    shadowOffset: {
+      width: 0,
+      height: 3
+    },
   },
-  buttonWrong: {
-    alignItems: 'center',
-    backgroundColor: '#cc0000',
-    padding: 10
+  btnCorrect:{
+  	backgroundColor: '#4dac26',
+  },
+  btnWrong: {
+    backgroundColor: '#d01c8b',
+  },
+  btnNeutral:{
+  	backgroundColor: '#00477F',
   },
 })
 
 
 
-//function mapStateToProps (state, { navigation }) {}
 function mapStateToProps (state, { navigation }) {
 	let { allDecks } = state
 	let { deckId } = navigation.state.params
 
+	//Caculate number of cards in the deck so it can be used as a prop
 	let deck = allDecks[deckId]
 	let cards = Object.values(deck.cards)
 	let numCards = cards.length
+
 
   return {
     decks: allDecks,
     deckId: deckId,
     numCards: numCards,
+    cards:cards,
   }
 }
 
-function mapDispatchToProps (dispatch) {
-  return {
-    newDeck: (data) => dispatch(addDeck(data)),
-    newCard: (data) => dispatch(addCard(data)),
-		addAllDecks: (data) => dispatch(receiveDecks(data)),
-  }
-}
 
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+  mapStateToProps
   )(QuizView)

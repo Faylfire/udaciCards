@@ -273,3 +273,39 @@ function AddCardButton (props){
     </TouchableOpacity>
    )
 }
+
+//cardback
+
+					<View key={cardId} style={[styles.card, {backgroundColor:'#AAB6A2'}]}>
+							<Text adjustsFontSizeToFit style={{flexWrap: 'wrap', color:'#555555'}}>{answer}</Text>
+						</View>
+
+//Card Legacy with adjustFontSizeToFit (weird behavior with multiple clicks)
+
+function Card ({ cardId, question, answer}) {
+	return (
+		<View key={cardId} style={styles.card}>
+				<Text adjustsFontSizeToFit
+							style={{flexWrap: 'wrap', fontSize:16, color:'#555555'}}
+				>
+							{question}
+				</Text>
+		</View>
+
+		)
+}
+
+//Card  with allowFontScaling
+function Card ({ cardId, question, answer, message, backgroundColor}) {
+	return (
+		<View key={cardId} style={[styles.card, {backgroundColor:backgroundColor}]}>
+				<Text allowFontScaling
+							style={{flexWrap: 'wrap', color:'#555555'}}
+				>
+					{message}
+				</Text>
+		</View>
+
+		)
+
+}

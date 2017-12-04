@@ -26,13 +26,10 @@ function Deck ({ deckId, title, cardCount, description, cards}) {
 
 	return (
 		<View key={deckId} style={styles.card}>
-				<Text style={{fontSize:20}}>{title}</Text>
-				<Text style={{margin:5}}>
+				<Text style={{fontSize:20, color:'#555555'}}>{title}</Text>
+				<Text style={{margin:5, color:'#87907D'}}>
 					{cardCount!==1 ? `${cardCount} Cards` : `${cardCount} Card`}
 				</Text>
-				{/*<Text style={{margin:5}}>{deckId}</Text>*/}
-				{/*<Text style={{flexWrap:'wrap'}}>{`Description: ${description}`}</Text>*/}
-				{/*<Text style={{flexWrap:'wrap'}}>{cards}</Text>*/}
 		</View>
 
 		)
@@ -177,7 +174,7 @@ const styles = StyleSheet.create({
     alignItems:'center'
   },
   card: {
-    backgroundColor: white,
+    backgroundColor: '#fffcf0',
     borderRadius: Platform.OS === 'ios' ? 16 : 2,
     padding: 20,
     marginLeft: 10,

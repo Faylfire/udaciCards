@@ -13,7 +13,9 @@ import { Provider } from 'react-redux'
 import rootReducer from './reducers'
 import AddDeck from './components/AddDeck.js'
 import AddCard from './components/AddCard.js'
+import QuizView from './components/QuizView.js'
 import ScreenHeader from './components/ScreenHeader.js'
+import { setLocalNotification } from './utils/helpers.js'
 
 const CenterView = styled.View`
   flex: 1;
@@ -114,6 +116,12 @@ const MainNavigator = StackNavigator({
       headerTintStyle:"#fff"
     }
   },
+  QuizView: {
+    screen: QuizView,
+    navigationOptions: {
+      headerTintStyle:"#fff"
+    }
+  },
 })
 
 
@@ -121,6 +129,11 @@ const MainNavigator = StackNavigator({
 
 
 export default class App extends Component {
+  componentDidMount () {
+    setLocalNotification()
+  }
+
+
   render() {
     return (
       <Provider store={createStore(rootReducer)}>

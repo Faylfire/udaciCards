@@ -24,12 +24,14 @@ import AddCardButton from './AddCardButton.js'
 
 
 
-function Card ({ cardId, question, answer}) {
+function Card ({ cardId, question, answer, message, backgroundColor}) {
 	return (
-		<View key={cardId} style={styles.card}>
-				<Text adjustsFontSizeToFit style={{flexWrap: 'wrap', fontSize:16}}>{question}</Text>
-				{/*<Text style={{flexWrap:'wrap'}}>{`Description: ${description}`}</Text>*/}
-				{/*<Text style={{flexWrap:'wrap'}}>{cards}</Text>*/}
+		<View key={cardId} style={[styles.card, {backgroundColor:backgroundColor}]}>
+				<Text allowFontScaling
+							style={{flexWrap: 'wrap', color:'#555555'}}
+				>
+					{message}
+				</Text>
 		</View>
 
 		)
@@ -86,10 +88,17 @@ class CardView extends React.Component {
 							cardId={cardId}
 							question={question}
 							answer={answer}
+							message={question}
+							backgroundColor='#91C3DC'
 					  />
-					: <View key={cardId} style={[styles.card, {backgroundColor:'#AAB6A2'}]}>
-							<Text adjustsFontSizeToFit style={{flexWrap: 'wrap'}}>{answer}</Text>
-						</View>
+					: <Card
+							cardId={cardId}
+							question={question}
+							answer={answer}
+							message={answer}
+							backgroundColor='#AAB6A2'
+					  />
+
 				}
       </TouchableOpacity>
 		)
@@ -109,7 +118,6 @@ class CardView extends React.Component {
 		let message = "👋 Add a new card using the + Button on the top right!"
 
 		if (!isEmptyObj(decks)){
-			//deck = decks[this.props.screenProps.deckId]
 			deck=decks[deckId]
 			cards = Object.values(deck.cards)
 			numCards = cards.length
@@ -132,7 +140,7 @@ class CardView extends React.Component {
 			<View style={styles.container}>
 
 
-				<View style={{alignItems:'center'}}>
+				<View style={{alignItems:'center', backgroundColor:'#ecf0f1'}}>
 
 					{numCards === 0
 						? <Text style={styles.addCardMessage}>{message}</Text>
@@ -140,8 +148,11 @@ class CardView extends React.Component {
 							<View style={{alignItems:'center'}}>
 								<TouchableOpacity
 				         	style={styles.button}
-				         	onPress={this.onPress}
-				       	>
+				         	onPress={() => this.props.navigation.navigate(
+              							'QuizView',
+              							{ deckId: deckId }
+            							)}
+				        >
 				         	<Text style={{color:'#D9DB56'}}> Start Quiz! </Text>
 				       	</TouchableOpacity>
 								<FlatList
@@ -164,20 +175,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor:'#ecf0f1',
-  },
-  review: {
-  	flex:1,
-    backgroundColor: 'steelblue',
-    margin: 10,
-    alignItems:'center',
-    padding:10,
-  },
-  box: {
-    width: 50,
-    height: 70,
-    backgroundColor: '#e76e63',
-    margin: 10,
-    alignItems:'center'
   },
   card: {
     backgroundColor: '#91C3DC',
@@ -208,9 +205,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#00477F',
     padding: 10,
-    width: 100,
+    width: 120,
     borderRadius:10,
     margin:10,
+    shadowRadius: 3,
+    shadowOpacity: 0.8,
+    shadowColor: 'rgba(0, 0, 0, 0.24)',
+    shadowOffset: {
+      width: 0,
+      height: 3
+    },
   }
 })
 

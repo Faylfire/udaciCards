@@ -63,9 +63,11 @@ class AddDeck extends Component {
     //Dismiss Keyboard
     Keyboard.dismiss()
 
-    //navigate back to deck list
-    this.props.navigation.navigate('Collection')
-
+    //navigate to individual deck view
+    this.props.navigation.navigate(
+              'IndividualDeck',
+              { deckId: id, title: title }
+            )
   }
 
   render() {
