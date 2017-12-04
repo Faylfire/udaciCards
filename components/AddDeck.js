@@ -85,7 +85,7 @@ class AddDeck extends Component {
           <Button
             onPress={this.handleSubmit}
             title="Create Deck"
-            color="#91C3DC"
+            color="steelblue"
             accessibilityLabel="Learn more about this purple button"
           />
         </KeyboardAvoidingView>

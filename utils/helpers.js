@@ -38,13 +38,19 @@ function capitalize (str = '') {
 }
 
 
-function getHeaderTitle (deck){
+function getHeaderTitle (deck, newCard){
 	let cards = deck.cards
   let cardCount = Object.keys(cards).length
 	let title = deck.title
 
-	if (cardCount !== 0){
+	if (newCard){
+		cardCount = cardCount + 1
+	}
+
+	if (cardCount !== 1){
 		title=`${title} (${cardCount} Cards)`
+	} else {
+		title=`${title} (${cardCount} Card)`
 	}
 
 	return title

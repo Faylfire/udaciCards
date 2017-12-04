@@ -23,26 +23,11 @@ import { width, height, totalSize } from 'react-native-dimension'
 import AddCardButton from './AddCardButton.js'
 
 
-
-function Card ({ cardId, question, answer}) {
-	return (
-		<View key={cardId} style={styles.card}>
-				<Text adjustsFontSizeToFit style={{flexWrap: 'wrap', fontSize:16}}>{question}</Text>
-				{/*<Text style={{flexWrap:'wrap'}}>{`Description: ${description}`}</Text>*/}
-				{/*<Text style={{flexWrap:'wrap'}}>{cards}</Text>*/}
-		</View>
-
-		)
-
-}
-
-
-class CardView extends React.Component {
+class QuizView extends React.Component {
 
 	 static navigationOptions = ({ navigation }) => ({
-    title: `${navigation.state.params.title}`,
+    title: `Quiz`,
       headerTintColor: white,
-      headerRight: <AddCardButton nav={navigation} />,
       headerTitleAllowFontScaling: false,
       headerStyle: {
         backgroundColor: '#4682B4',
@@ -57,12 +42,13 @@ class CardView extends React.Component {
     super(props);
     this.state = {
     				deck:{},
-    				cardBack:{}
+    				cardBack:{},
+    				quizQuestion:1,
 					}
   }
 
 	componentDidMount() {
-		let { addAllDecks } = this.props
+		let { addAllDecks, decks, deckId } = this.props
 
 	}
 
@@ -93,27 +79,28 @@ class CardView extends React.Component {
 				}
       </TouchableOpacity>
 		)
-
 	}
 
 	render() {
-		let { decks, deckId } = this.props
+		let { decks, deckId, numCards} = this.props
+		let { quizQuestion } = this.state
 		console.log("In Render CardView")
 		console.log(decks)
 		console.log(this.props)
 		//let decks = Object.values(this.state.decks)
 		let cards = {}
 		let deck = {}
-		let numCards = 0
-		let title='UdaciCards'
-		let message = "👋 Add a new card using the + Button on the top right!"
+		let card = {}
+		//let num = 0
+
 
 		if (!isEmptyObj(decks)){
 			//deck = decks[this.props.screenProps.deckId]
 			deck=decks[deckId]
 			cards = Object.values(deck.cards)
-			numCards = cards.length
+			//numCards = cards.length
 			title = deck.title
+			card = cards[0]
 		}
 
 		//let decks = setDummyData()
@@ -122,35 +109,26 @@ class CardView extends React.Component {
 		console.log(cards)
 
 
-		if (numCards !== 0){
-			title=`${title} (${numCards} Cards)`
-		}
-
-
-
 		return (
 			<View style={styles.container}>
+				<Text style={{fontSize:20}}>
+					{`${quizQuestion}/${numCards}`}
+				</Text>
+				{renderItem(card)}
 
-
-				<View style={{alignItems:'center'}}>
-
-					{numCards === 0
-						? <Text style={styles.addCardMessage}>{message}</Text>
-						:
-							<View style={{alignItems:'center'}}>
-								<TouchableOpacity
-				         	style={styles.button}
-				         	onPress={this.onPress}
-				       	>
-				         	<Text style={{color:'#D9DB56'}}> Start Quiz! </Text>
-				       	</TouchableOpacity>
-								<FlatList
-									data={cards}
-									renderItem={this.renderItem}
-									keyExtractor={(item, index) => index}
-								/>
-							</View>
-					}
+				<View style={{flexDirection:'row', justifyContent:'space-around'}}>
+					<TouchableOpacity
+		         style={styles.buttonRight}
+		         onPress={this.onPress}
+		      >
+		         <Text>Correct</Text>
+		      </TouchableOpacity>
+		      <TouchableOpacity
+		         style={styles.buttonWrong}
+		         onPress={this.onPress}
+		      >
+		         <Text>Incorrect</Text>
+		      </TouchableOpacity>
 
 				</View>
 			</View>
@@ -204,14 +182,16 @@ const styles = StyleSheet.create({
   	marginRight:10,
   	marginLeft:10,
   },
-  button: {
+  buttonRight: {
     alignItems: 'center',
-    backgroundColor: '#00477F',
-    padding: 10,
-    width: 100,
-    borderRadius:10,
-    margin:10,
-  }
+    backgroundColor: '#009933',
+    padding: 10
+  },
+  buttonWrong: {
+    alignItems: 'center',
+    backgroundColor: '#cc0000',
+    padding: 10
+  },
 })
 
 
@@ -221,9 +201,14 @@ function mapStateToProps (state, { navigation }) {
 	let { allDecks } = state
 	let { deckId } = navigation.state.params
 
+	let deck = allDecks[deckId]
+	let cards = Object.values(deck.cards)
+	let numCards = cards.length
+
   return {
     decks: allDecks,
     deckId: deckId,
+    numCards: numCards,
   }
 }
 
@@ -238,4 +223,4 @@ function mapDispatchToProps (dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-  )(CardView)
+  )(QuizView)

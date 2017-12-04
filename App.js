@@ -98,17 +98,20 @@ const Tabs = TabNavigator({
 const MainNavigator = StackNavigator({
   Home: {
     screen: Tabs,
+    navigationOptions: {
+      headerTintStyle:"#fff"
+    }
   },
   IndividualDeck: {
     screen: CardView,
+    navigationOptions: {
+      headerTintStyle:"#fff"
+    }
   },
-  createCard: {
+  CreateCard: {
     screen: AddCard,
     navigationOptions: {
-      headerTintColor: white,
-      headerStyle: {
-        backgroundColor: purple,
-      }
+      headerTintStyle:"#fff"
     }
   },
 })

@@ -205,3 +205,71 @@ const styles = StyleSheet.create({
           <Text>{this.state.pressed.toString()}</Text>
           </View>
         </TouchableOpacity>
+
+//Button
+
+        <Button
+          buttonStyle={{ backgroundColor: '#666666', borderRadius: 10 }}
+          textStyle={{ textAlign: 'center', fontSize:24}}
+          title={`Add Deck`}
+        />
+
+
+        <UdaciStatusBar backgroundColor={'steelblue'} barStyle='light-content' />
+
+
+            <Header
+  		leftComponent={{ icon: 'menu', color: '#fff' }}
+  		centerComponent={{ text: title, style: { color: '#fff' } }}
+  		rightComponent={{ icon: 'home', color: '#fff' }}
+		/>
+
+
+
+		<Tabs screenProps={{deckId: 'jappexi8sbc6u7u7y'}}/>
+
+
+
+		//Mainnavigator
+
+
+		const MainNavigator = StackNavigator({
+  Home: {
+    screen: Tabs,
+  },
+  IndividualDeck: {
+    screen: CardView,
+    navigationOptions: {
+      title: 'Card View',
+      headerTintColor: white,
+      headerStyle: {
+        backgroundColor: '#4682B4',
+      }
+    }
+  },
+  createCard: {
+    screen: AddCard,
+    navigationOptions: {
+      headerTintColor: white,
+      headerStyle: {
+        backgroundColor: purple,
+      }
+    }
+  },
+})
+
+
+
+//cardbutton add
+
+function AddCardButton (props){
+
+
+	return(
+		<TouchableOpacity style={{marginRight:5}} onPress={() => props.handlePress}>
+			{console.log(props)}
+			<Ionicons name='ios-add' size={40} color='#fff' />
+
+    </TouchableOpacity>
+   )
+}

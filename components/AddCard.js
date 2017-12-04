@@ -10,26 +10,42 @@ import { genID, genIDSimple, getHeaderTitle } from '../utils/helpers.js'
 import { updateDeck } from '../utils/api.js'
 import { connect } from 'react-redux'
 import { receiveDecks, addDeck, addCard } from '../actions'
-import ScreenHeader from './ScreenHeader.js'
+
 
 
 
 class AddCard extends Component {
+
+
+  static navigationOptions = ({ navigation }) => ({
+      title: 'Add New Card',
+      headerTintColor: '#fff',
+      headerTitleAllowFontScaling: false,
+      headerStyle: {
+        backgroundColor: '#4682B4',
+      },
+      headerTitleStyle: {
+        fontSize:14
+      }
+    });
+
   state = {question: '', answer:''}
 
-  handleChange = (e, { name, value }) => {
-    this.setState({ [name]: value })
-  }
+  changeQuestion = text => this.setState({ question: text });
+
+  changeAnswer = text => this.setState({ answer: text });
+
 
   handleSubmit = () => {
-    const { newCard, allDecks, deckId } = this.props
-    let deck = allDecks[deckId]
-    let title = getHeaderTitle(deck)
+    const { newCard, newDeck, decks, deckId } = this.props
+    console.log(this.props)
+    let deck = decks[deckId]
+    let title = getHeaderTitle(deck, true)
     let question= this.state.question.trim()
     let answer= this.state.answer.trim()
     let id = genIDSimple()
     if (question === ''){
-      question="What is the answer to the Ultimate Question of Life, the Universe, and Everything."
+      question="What is the answer to the Ultimate Question of Life, the Universe, and Everything?"
     }
 
     if (answer === ''){
@@ -58,41 +74,42 @@ class AddCard extends Component {
     Keyboard.dismiss()
 
     //navigate back to individual card list
-    this.props.navigation.navigate(
+    /*this.props.navigation.navigate(
               'IndividualDeck',
               { deckId: deckId, title: title }
-            )
-    //this.props.navigation.navigate('Collection')
+            )*/
+    this.props.navigation.goBack()
+    //this.props.navigation.goBack()
   }
 
   render() {
+    console.log(this.props)
 
     return (
       <View style={{flex:1}}>
-        <ScreenHeader title='Add New Card' />
         <KeyboardAvoidingView behavior="padding" style={styles.container}>
           <View style={{alignItems:'center', margin:10}}>
             <FormLabel labelStyle={{fontSize:24, textAlign:'center'}}>Question:</FormLabel>
             <FormInput containerStyle={{margin:10}}
-                       inputStyle={{fontSize:24, textAlign:'center'}}
+                       inputStyle={{fontSize:14, textAlign:'center'}}
                        placeholder='New Question'
                        name='question'
                        value={this.state.question}
-                       onChange={this.handleChange}
+                       onChangeText={this.changeQuestion}
             />
             <FormLabel labelStyle={{fontSize:24, textAlign:'center'}}>Answer:</FormLabel>
             <FormInput containerStyle={{margin:10}}
-                       inputStyle={{fontSize:24, textAlign:'center'}}
+                       inputStyle={{fontSize:14, textAlign:'center'}}
                        placeholder='New Question'
                        name='answer'
                        value={this.state.answer}
-                       onChange={this.handleChange}
+                       onChangeText={this.changeAnswer}
             />
           </View>
           <Button
             onPress={this.handleSubmit}
             title="Add Card"
-            color="#91C3DC"
+            color="steelblue"
             accessibilityLabel="Learn more about this purple button"
           />
         </KeyboardAvoidingView>
@@ -113,9 +130,11 @@ const styles = StyleSheet.create({
 
 function mapStateToProps (state, { navigation }) {
   let { allDecks } = state
+  let { deckId } = navigation.state.params
 
   return {
     decks: allDecks,
+    deckId: deckId,
   }
 }
 

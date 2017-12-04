@@ -23,10 +23,13 @@ import ScreenHeader from './ScreenHeader.js'
 
 
 function Deck ({ deckId, title, cardCount, description, cards}) {
+
 	return (
 		<View key={deckId} style={styles.card}>
 				<Text style={{fontSize:20}}>{title}</Text>
-				<Text style={{margin:5}}>{`${cardCount} Cards`}</Text>
+				<Text style={{margin:5}}>
+					{cardCount!==1 ? `${cardCount} Cards` : `${cardCount} Card`}
+				</Text>
 				{/*<Text style={{margin:5}}>{deckId}</Text>*/}
 				{/*<Text style={{flexWrap:'wrap'}}>{`Description: ${description}`}</Text>*/}
 				{/*<Text style={{flexWrap:'wrap'}}>{cards}</Text>*/}
