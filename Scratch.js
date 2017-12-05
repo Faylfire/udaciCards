@@ -1,4 +1,6 @@
 //Scratch.js
+//File for copy pasting legacy code or alternate code
+//Warning** Not managed, used for convience sake
 
 
 import React from 'react';
@@ -309,3 +311,29 @@ function Card ({ cardId, question, answer, message, backgroundColor}) {
 		)
 
 }
+
+//Legacy Deck view
+
+			<TouchableOpacity style={{flex:1}}
+            onPress={() => this.props.navigation.navigate(
+              'IndividualDeck',
+              { deckId: id, title: individualTitle }
+            )}
+      >
+      	{!state.cardBack[id]
+	        ? <Deck
+							deckId={id}
+							title={title}
+							description={description}
+							cardCount={cardCount}
+							cards={JSON.stringify(cards)}
+					  />
+					: <View key={id} style={styles.card}>
+							<Text style={{fontSize:20}}></Text>
+							<Text style={{margin:11}}>Back of the Card </Text>
+							<Text ></Text>
+						</View>
+
+				}
+      </TouchableOpacity>
+		)

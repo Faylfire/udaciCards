@@ -8,13 +8,9 @@ import { StyleSheet,
 				 Platform,
 				 Button,
 } from 'react-native'
-//import FlexDemo from './FlexDemo'
 import { FontAwesome, Ionicons } from '@expo/vector-icons'
-import styled from 'styled-components/native'
-import { TabNavigator, StackNavigator, DrawerNavigator } from 'react-navigation'
-import { Constants } from 'expo'
+import { TabNavigator, StackNavigator } from 'react-navigation'
 import { purple, white } from '../utils/colors'
-import { setDummyData} from '../utils/deckCreator.js'
 import { getDecks } from '../utils/api.js'
 import { isEmptyObj } from '../utils/helpers.js'
 import { connect } from 'react-redux'
@@ -33,16 +29,14 @@ function Card ({ cardId, question, answer, message, backgroundColor}) {
 					{message}
 				</Text>
 		</View>
-
 		)
-
 }
 
 
 class CardView extends React.Component {
 
 	 static navigationOptions = ({ navigation }) => ({
-    title: `${navigation.state.params.title}`,
+    	title: navigation.state.params.myTitle ? navigation.state.params.myTitle : 'Card View',
       headerTintColor: white,
       headerRight: <AddCardButton nav={navigation} />,
       headerTitleAllowFontScaling: false,
@@ -65,8 +59,27 @@ class CardView extends React.Component {
 
 	componentDidMount() {
 		let { addAllDecks } = this.props
-
+		this.props.navigation.setParams({
+ 			myTitle: this.props.headerTitle
+		})
 	}
+
+	componentWillReceiveProps(nextProps){
+
+		//Tests when a view navigates back using goBack()
+		//If there is a change in the Title of the screen
+		//Updates the Title accordingly
+		if (nextProps.headerTitle !== this.props.headerTitle){
+			console.log("Inside if")
+      this.props.navigation.setParams({
+ 				myTitle: nextProps.headerTitle
+			})
+
+    }
+
+  }
+
+
 
 
 
@@ -240,12 +253,13 @@ const styles = StyleSheet.create({
 
 //function mapStateToProps (state, { navigation }) {}
 function mapStateToProps (state, { navigation }) {
-	let { allDecks } = state
+	let { allDecks, headerTitle } = state
 	let { deckId } = navigation.state.params
 
   return {
     decks: allDecks,
     deckId: deckId,
+    headerTitle: headerTitle,
   }
 }
 

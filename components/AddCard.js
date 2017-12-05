@@ -9,7 +9,7 @@ import { Constants } from 'expo';
 import { genID, genIDSimple, getHeaderTitle } from '../utils/helpers.js'
 import { updateDeck } from '../utils/api.js'
 import { connect } from 'react-redux'
-import { receiveDecks, addDeck, addCard } from '../actions'
+import { receiveDecks, addDeck, addCard, changeHeaderTitle } from '../actions'
 
 
 
@@ -37,8 +37,7 @@ class AddCard extends Component {
 
 
   handleSubmit = () => {
-    const { newCard, newDeck, decks, deckId } = this.props
-    console.log(this.props)
+    const { newCard, newDeck, decks, deckId, changeTitle } = this.props
     let deck = decks[deckId]
     let title = getHeaderTitle(deck, true)
     let question= this.state.question.trim()
@@ -73,13 +72,18 @@ class AddCard extends Component {
     //Dismiss Keyboard
     Keyboard.dismiss()
 
-    //navigate back to individual card list
+    //Set the name for the individual deck View
+    //increasing card count by one
+    console.log("Title change: " + title)
+    changeTitle(title)
+
+    //navigate back to individual deck View
     /*this.props.navigation.navigate(
               'IndividualDeck',
               { deckId: deckId, title: title }
             )*/
     this.props.navigation.goBack()
-    //this.props.navigation.goBack()
+
   }
 
   render() {
@@ -92,7 +96,7 @@ class AddCard extends Component {
             <FormLabel labelStyle={{fontSize:24, textAlign:'center'}}>Question:</FormLabel>
             <FormInput containerStyle={{margin:10}}
                        inputStyle={{fontSize:14, textAlign:'center'}}
-                       placeholder='New Question'
+                       placeholder='Your Question'
                        name='question'
                        value={this.state.question}
                        onChangeText={this.changeQuestion}
@@ -100,7 +104,7 @@ class AddCard extends Component {
             <FormLabel labelStyle={{fontSize:24, textAlign:'center'}}>Answer:</FormLabel>
             <FormInput containerStyle={{margin:10}}
                        inputStyle={{fontSize:14, textAlign:'center'}}
-                       placeholder='New Question'
+                       placeholder='Your Answer'
                        name='answer'
                        value={this.state.answer}
                        onChangeText={this.changeAnswer}
@@ -143,6 +147,7 @@ function mapDispatchToProps (dispatch) {
     newDeck: (data) => dispatch(addDeck(data)),
     newCard: (data) => dispatch(addCard(data)),
     addAllDecks: (data) => dispatch(receiveDecks(data)),
+    changeTitle: (title) => dispatch(changeHeaderTitle(title)),
   }
 }
 

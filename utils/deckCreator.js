@@ -8,7 +8,7 @@ import { setDecks,
 
 
 function getRandomNumber (max) {
-  return Math.floor(Math.random() * max) + 0
+  return Math.floor(Math.random() * max) + 1
 }
 
 export function setDummyData () {
@@ -16,7 +16,7 @@ export function setDummyData () {
 
   let decks = {}
   const timestamp = Date.now()
-  let titles = ['React', 'Udacity', 'General', 'Japanese', 'Redux']
+  let titles = ['React', 'Udacity', 'Redux', 'General', 'Bunnies']
 
   for (let i = 0; i < 5; i++) {
     let id = genID()

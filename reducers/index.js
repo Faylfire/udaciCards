@@ -1,4 +1,4 @@
-import { RECEIVE_DECKS, ADD_DECK, ADD_CARD } from '../actions'
+import { RECEIVE_DECKS, ADD_DECK, ADD_CARD, CHANGE_HEADER_TITLE } from '../actions'
 import { combineReducers } from 'redux'
 
 
@@ -32,6 +32,17 @@ function allDecks (state = {}, action) {
   }
 }
 
+function headerTitle (state = 'Card View', action) {
+
+  switch (action.type) {
+    case CHANGE_HEADER_TITLE :
+      return action.title
+    default :
+      return state
+  }
+}
+
 export default combineReducers({
-  allDecks
+  allDecks,
+  headerTitle,
 });

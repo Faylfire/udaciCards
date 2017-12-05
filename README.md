@@ -29,6 +29,7 @@ Clone the repo follow the instructions below:
     - `cd udaciCards`
     - `yarn start`
 * Once the expo service is started follow the instructions shown in the console
+
 		![Expo Console](expo-console.png)
 
 

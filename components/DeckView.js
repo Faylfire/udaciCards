@@ -10,23 +10,23 @@ import { StyleSheet,
 //import FlexDemo from './FlexDemo'
 import { FontAwesome, Ionicons } from '@expo/vector-icons'
 import styled from 'styled-components/native'
-import { TabNavigator, StackNavigator, DrawerNavigator } from 'react-navigation'
+import { TabNavigator, StackNavigator } from 'react-navigation'
 import { Constants } from 'expo'
-import { purple, white } from '../utils/colors'
+import { purple, white, deckTextColor} from '../utils/colors'
 import { setDummyData} from '../utils/deckCreator.js'
 import { getDecks } from '../utils/api.js'
 import { isEmptyObj, getHeaderTitle } from '../utils/helpers.js'
 import { connect } from 'react-redux'
-import { receiveDecks, addDeck, addCard } from '../actions'
+import { receiveDecks, addDeck, addCard, changeHeaderTitle } from '../actions'
 import ScreenHeader from './ScreenHeader.js'
 
 
-
+//Component for each element of the Deck List
 function Deck ({ deckId, title, cardCount, description, cards}) {
 
 	return (
 		<View key={deckId} style={styles.card}>
-				<Text style={{fontSize:20, color:'#555555'}}>{title}</Text>
+				<Text style={{fontSize:20, color:deckTextColor}}>{title}</Text>
 				<Text style={{margin:5, color:'#87907D'}}>
 					{cardCount!==1 ? `${cardCount} Cards` : `${cardCount} Card`}
 				</Text>
@@ -61,18 +61,21 @@ class DeckView extends React.Component {
 
 	componentDidMount() {
 		let { addAllDecks } = this.props
-		console.log("Inside ComponentMount")
-		console.log(this.props.decks)
+
+
 
 		getDecks().then((data) => {
 			if (!isEmptyObj(data)) {
+				console.log('Got Date from Async!!')
 				this.setState({
 					decks: data
 				})
 
+				//update Redux store
 				addAllDecks(data)
 
 			} else {
+				console.log('Setting Dummy Data!')
 				let decks  = setDummyData()
 				this.setState({
 					decks: decks
@@ -80,11 +83,11 @@ class DeckView extends React.Component {
 
 				addAllDecks(decks)
 			}
+
+
 		})
 
 	}
-
-
 
 
 	renderItem = ({ item }) =>{
@@ -96,10 +99,14 @@ class DeckView extends React.Component {
 
 		return (
 			<TouchableOpacity style={{flex:1}}
-            onPress={() => this.props.navigation.navigate(
+						ref = {button => this.button = button}
+            onPress={() => {
+            	this.button.disabled = true
+            	this.props.changeTitle(individualTitle)
+            	this.props.navigation.navigate(
               'IndividualDeck',
-              { deckId: id, title: individualTitle }
-            )}
+              { deckId: id }
+            )}}
       >
         <Deck
 						deckId={id}
@@ -114,19 +121,14 @@ class DeckView extends React.Component {
 	}
 
 	render() {
-
-		//let decks = Object.values(this.state.decks)
+		//Get the decks in array format for FlatList or Map
 		let decks = Object.values(this.props.decks)
-		//let decks = setDummyData()
-		//decks = Object.values(decks)
-		console.log("Inside Render")
-		console.log(decks)
 
-
+		/*
 		if (decks.length !== 0){
 			decks[0].description = 'Something new and interesting to learn... maybe. But Just a little bit longer. Something new and interesting to learn... maybe. But Just a little bit longer. Something new and interesting to learn... maybe. But Just a little bit longer.'
 
-		}
+		}*/
 
 		return (
 			<View style={styles.container}>
@@ -150,20 +152,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor:'#ecf0f1',
     alignItems:'stretch'
-  },
-  review: {
-  	flex:1,
-    backgroundColor: 'steelblue',
-    margin: 10,
-    alignItems:'center',
-    padding:10,
-  },
-  box: {
-    width: 50,
-    height: 70,
-    backgroundColor: '#e76e63',
-    margin: 10,
-    alignItems:'center'
   },
   card: {
     backgroundColor: '#fffcf0',
@@ -199,6 +187,7 @@ function mapDispatchToProps (dispatch) {
     newDeck: (data) => dispatch(addDeck(data)),
     newCard: (data) => dispatch(addCard(data)),
 		addAllDecks: (data) => dispatch(receiveDecks(data)),
+		changeTitle: (title) => dispatch(changeHeaderTitle(title))
   }
 }
 

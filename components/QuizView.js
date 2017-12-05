@@ -8,13 +8,10 @@ import { StyleSheet,
 				 Platform,
 				 Button,
 } from 'react-native'
-//import FlexDemo from './FlexDemo'
 import { FontAwesome, Ionicons } from '@expo/vector-icons'
-import styled from 'styled-components/native'
-import { TabNavigator, StackNavigator, DrawerNavigator } from 'react-navigation'
+import { TabNavigator, StackNavigator} from 'react-navigation'
 import { Constants } from 'expo'
-import { purple, white } from '../utils/colors'
-import { setDummyData} from '../utils/deckCreator.js'
+import { purple, white, steelblue } from '../utils/colors'
 import { getDecks } from '../utils/api.js'
 import { isEmptyObj,
 				 clearLocalNotification,
@@ -28,17 +25,15 @@ import AddCardButton from './AddCardButton.js'
 
 function Card ({ cardId, question, answer, message, backgroundColor}) {
 	return (
-		<View key={cardId} style={[styles.card, {backgroundColor:backgroundColor}]}>
-				<Text allowFontScaling
-							style={{flexWrap: 'wrap', color:'#555555'}}
-				>
-					{message}
-				</Text>
-		</View>
-
+			<View key={cardId} style={[styles.card, {backgroundColor:backgroundColor}]}>
+					<Text allowFontScaling
+								style={{flexWrap: 'wrap', color:'#555555'}}
+					>
+						{message}
+					</Text>
+			</View>
 		)
 }
-
 
 
 class QuizView extends React.Component {
@@ -55,7 +50,6 @@ class QuizView extends React.Component {
       }
     });
 
-
 	constructor(props) {
     super(props);
     this.state = {
@@ -71,8 +65,6 @@ class QuizView extends React.Component {
 		let { addAllDecks, decks, deckId } = this.props
 
 	}
-
-
 
 	renderItem = ({ card }) =>{
 		let {question, answer, cardId } = card
@@ -102,13 +94,13 @@ class QuizView extends React.Component {
 							message={answer}
 							backgroundColor='#AAB6A2'
 					  />
-
 				}
       </TouchableOpacity>
 		)
 
 	}
 
+	//Resets the internal state so the quiz starts over
 	resetQuiz = () => {
 		this.setState({
     				deck:{},
@@ -119,12 +111,16 @@ class QuizView extends React.Component {
 					})
 	}
 
+	//Returns to indivdual deck view using navigation's goBack()
 	backToDeck = () => this.props.navigation.goBack()
 
+	//Calls onPress for correct or incorrect Self Assessment
 	onCorrect = () => this.onPress(true)
 
 	onIncorrect = () => this.onPress(false)
 
+	//Handles the scoring and moving the quiz along upon self
+	//judgement
 	onPress = (bool) => {
 
 		let quizQuestion = this.state.quizQuestion + 1
@@ -134,8 +130,7 @@ class QuizView extends React.Component {
 		if (bool){
 			score = score+1
 		}
-		console.log('Question Number: '+ quizQuestion)
-		console.log(score+'/'+numCards)
+
 		if (quizQuestion > numCards){
 			this.setState({
 				score:score,
@@ -151,15 +146,11 @@ class QuizView extends React.Component {
 				score:score,
 			})
 		}
-		console.log(this.state)
 	}
 
 	render() {
 		let { decks, deckId, numCards, cards} = this.props
 		let { quizQuestion, quizComplete, score} = this.state
-		console.log("In Render CardView")
-		console.log(decks)
-		console.log(this.props)
 
 		let card = {}
 		let finalScore = 0
@@ -172,10 +163,8 @@ class QuizView extends React.Component {
 			finalScore = (score/numCards*100).toFixed(0)
 		}
 
-		console.log("Inside Card Render")
-		console.log('Score: ' + this.state.score)
-
-
+		//Quiz View, when quiz is complete, show score otherwise, the cards in the deck
+		//and self scoring options with correct/incorrect buttons
 		return (
 			<View style={{flex:1}}>
 				{quizComplete===true
