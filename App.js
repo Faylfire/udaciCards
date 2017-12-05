@@ -2,10 +2,9 @@
 import React, { Component } from 'react'
 import { StyleSheet, Text, View, AppRegistry, Platform, StatusBar } from 'react-native'
 import { FontAwesome, Ionicons } from '@expo/vector-icons'
-import styled from 'styled-components/native'
-import { TabNavigator, StackNavigator, DrawerNavigator } from 'react-navigation'
+import { TabNavigator, StackNavigator } from 'react-navigation'
 import { Constants } from 'expo'
-import { purple, white } from './utils/colors'
+import { purple, white, steelblue } from './utils/colors'
 import DeckView from './components/DeckView.js'
 import CardView from './components/CardView.js'
 import { createStore } from 'redux'
@@ -14,52 +13,9 @@ import rootReducer from './reducers'
 import AddDeck from './components/AddDeck.js'
 import AddCard from './components/AddCard.js'
 import QuizView from './components/QuizView.js'
-import ScreenHeader from './components/ScreenHeader.js'
 import { setLocalNotification } from './utils/helpers.js'
 
-const CenterView = styled.View`
-  flex: 1;
-  align-items: center;
-  justify-content: center;
-  background: #333;
-`
-
-function Home () {
-  return (
-    <DeckView />
-  )
-}
-
-function Dashboard () {
-  return (
-    <AddDeck />
-  )
-}
-
-function UdaciStatusBar ( { backgroundColor, ...props}) {
-  return (
-    <View style={{backgroundColor, height: Constants.statusBarHeight}}>
-      <StatusBar translucent backgroundColor={backgroundColor} {...props}/>
-    </View>
-  )
-}
-
-
-
-//TabNavigator(RouteConfigs, TabNavigatorConfig)
-const RouteConfigs = {
-  Home: {
-    screen: Home,
-  },
-  Dashboard: {
-    screen: Dashboard
-  },
-}
-
-const TabNavigatorConfig = {swipeEnabled: true}
-
-//const Tabs = TabNavigator(RouteConfigs, TabNavigatorConfig)
-
+//All Navigators defined
 
 const Tabs = TabNavigator({
   Collection: {
@@ -125,8 +81,6 @@ const MainNavigator = StackNavigator({
     }
   },
 })
-
-
 
 
 

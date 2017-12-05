@@ -18,7 +18,6 @@ import { getDecks } from '../utils/api.js'
 import { isEmptyObj, getHeaderTitle } from '../utils/helpers.js'
 import { connect } from 'react-redux'
 import { receiveDecks, addDeck, addCard, changeHeaderTitle } from '../actions'
-import ScreenHeader from './ScreenHeader.js'
 
 
 //Component for each element of the Deck List

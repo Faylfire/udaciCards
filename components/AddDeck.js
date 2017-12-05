@@ -10,7 +10,6 @@ import { genID, genIDSimple} from '../utils/helpers.js'
 import { updateDeck } from '../utils/api.js'
 import { connect } from 'react-redux'
 import { receiveDecks, addDeck, addCard } from '../actions'
-import ScreenHeader from './ScreenHeader.js'
 
 
 

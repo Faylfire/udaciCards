@@ -18,6 +18,7 @@ export function addDeck (deck) {
   }
 }
 
+//Add single card to the correct deck
 export function addCard ({deckId, card}) {
   return {
     type: ADD_CARD,
