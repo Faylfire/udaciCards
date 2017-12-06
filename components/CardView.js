@@ -70,7 +70,6 @@ class CardView extends React.Component {
 		//If there is a change in the Title of the screen
 		//Updates the Title accordingly
 		if (nextProps.headerTitle !== this.props.headerTitle){
-			console.log("Inside if")
       this.props.navigation.setParams({
  				myTitle: nextProps.headerTitle
 			})
@@ -120,9 +119,9 @@ class CardView extends React.Component {
 
 	render() {
 		let { decks, deckId } = this.props
-		console.log("In Render CardView")
-		console.log(decks)
-		console.log(this.props)
+		//console.log("In Render CardView")
+		//console.log(decks)
+		//console.log(this.props)
 		//let decks = Object.values(this.state.decks)
 		let cards = {}
 		let deck = {}
@@ -139,8 +138,8 @@ class CardView extends React.Component {
 
 		//let decks = setDummyData()
 		//decks = Object.values(decks)
-		console.log("Inside Card Render")
-		console.log(cards)
+		//console.log("Inside Card Render")
+		//console.log(cards)
 
 
 		if (numCards !== 0){

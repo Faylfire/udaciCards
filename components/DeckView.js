@@ -65,7 +65,7 @@ class DeckView extends React.Component {
 
 		getDecks().then((data) => {
 			if (!isEmptyObj(data)) {
-				console.log('Got Date from Async!!')
+				console.log('Got Data from Async!!')
 				this.setState({
 					decks: data
 				})

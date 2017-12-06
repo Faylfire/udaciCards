@@ -28,7 +28,7 @@ export default class AddCardButton extends React.Component {
 	render () {
 		let {deckId} = this.props.nav.state.params
 		let {nav} = this.props
-		console.log(this.props)
+		//console.log(this.props)
 		return (
 			<TouchableOpacity style={{marginRight:5}}
 						onPress={() => nav.navigate(
