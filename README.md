@@ -30,7 +30,7 @@ Clone the repo follow the instructions below:
     - `yarn start`
 * Once the expo service is started follow the instructions shown in the console
 
-		![Expo Console](expo-console.png)
+![Expo Console](expo-console.png)
 
 
     - To run on your personal iOS or Android Device install the Expo Client App from the app store on any device
