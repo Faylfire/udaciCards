@@ -39,8 +39,8 @@ Clone the repo follow the instructions below:
 
 
 
-    * [Expo in Android Store](https://play.google.com/store/apps/details?id=host.exp.exponent&hl=en)
-    * [Expo in iTunes](https://itunes.apple.com/us/app/expo-client/id982107779?mt=8)
+   * [Expo in Android Store](https://play.google.com/store/apps/details?id=host.exp.exponent&hl=en)
+   * [Expo in iTunes](https://itunes.apple.com/us/app/expo-client/id982107779?mt=8)
 
 
 ## Built With
